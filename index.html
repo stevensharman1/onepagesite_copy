@@ -1,1 +1,98 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Introduction Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    label { font-weight: bold; }
+    .course-item { display: flex; gap: 10px; margin-bottom: 5px; }
+    .output { margin-top: 30px; padding: 20px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>Introduction Form</h1>
+
+  <form id="introForm">
+    <label for="firstname">First Name:</label><br>
+    <input type="text" id="firstname" name="firstname" value="D.I." required><br><br>
+
+    <label for="lastname">Last Name:</label><br>
+    <input type="text" id="lastname" name="lastname" value="Last" required><br><br>
+
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email" value="example@example.com" required><br><br>
+
+    <label for="portfolio">Portfolio URL:</label><br>
+    <input type="url" id="portfolio" name="portfolio" value="https://example.com" required><br><br>
+
+    <h3>Courses</h3>
+    <div id="coursesContainer">
+      <div class="course-item">
+        <input type="text" class="course" value="Course 1" required />
+        <button type="button" onclick="removeCourse(this)">Remove</button>
+      </div>
+      <div class="course-item">
+        <input type="text" class="course" value="Course 2" required />
+        <button type="button" onclick="removeCourse(this)">Remove</button>
+      </div>
+    </div>
+    <button type="button" onclick="addCourse()">Add Course</button><br><br>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <div id="output" class="output"></div>
+
+  <script>
+    function addCourse() {
+      const container = document.getElementById('coursesContainer');
+      const div = document.createElement('div');
+      div.className = 'course-item';
+      div.innerHTML = `
+        <input type="text" class="course" required />
+        <button type="button" onclick="removeCourse(this)">Remove</button>
+      `;
+      container.appendChild(div);
+    }
+
+    function removeCourse(button) {
+      button.parentElement.remove();
+    }
+
+    document.getElementById('introForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const firstname = document.getElementById('firstname').value;
+      const lastname = document.getElementById('lastname').value;
+      const email = document.getElementById('email').value;
+      const portfolio = document.getElementById('portfolio').value;
+
+      const courses = Array.from(document.querySelectorAll('.course')).map(i => i.value);
+
+      let courseListHTML = '<ul>';
+      courses.forEach(c => {
+        courseListHTML += `<li>${c}</li>`;
+      });
+      courseListHTML += '</ul>';
+
+      document.getElementById('output').innerHTML = `
+        <h2>Submitted Information</h2>
+        <p><strong>First Name:</strong> ${firstname}</p>
+        <p><strong>Last Name:</strong> ${lastname}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Portfolio URL:</strong> <a href="${portfolio}" target="_blank">${portfolio}</a></p>
+        <h3>Courses</h3>
+        ${courseListHTML}
+      `;
+    });
+  </script>
+</body>
+</html>
